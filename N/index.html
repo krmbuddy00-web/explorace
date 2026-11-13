@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071c22">
+<title>Explorace | Kuiz Islamik</title>
+
+<style>
+:root {
+  --bg: #071c22;
+  --card: #102c32;
+  --option: #173940;
+  --gold: #f4cb77;
+  --white: #f7faf9;
+  --muted: #a9bdc0;
+  --green: #38d39f;
+  --red: #ff7784;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top, #235057, transparent 60%),
+    var(--bg);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid #315058;
+  border-radius: 24px;
+  padding: clamp(20px, 5vw, 40px);
+  box-shadow: 0 20px 60px #0005;
+}
+
+.hidden { display: none !important; }
+
+.logo {
+  font-size: 48px;
+  text-align: center;
+}
+
+.eyebrow {
+  text-align: center;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-top: 12px;
+}
+
+h1 {
+  text-align: center;
+  font-size: clamp(30px, 6vw, 46px);
+  line-height: 1.2;
+  margin: 15px 0;
+}
+
+h2 {
+  font-size: clamp(20px, 4vw, 27px);
+  line-height: 1.5;
+}
+
+.gold { color: var(--gold); }
+
+.description {
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.8;
+}
+
+input {
+  width: 100%;
+  padding: 16px;
+  margin-top: 12px;
+  background: #092329;
+  color: white;
+  border: 1px solid #42616a;
+  border-radius: 12px;
+  font: inherit;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 18px;
+  padding: 17px;
+  background: var(--gold);
+  color: #14242a;
+  border: 0;
+  border-radius: 13px;
+  font-weight: 800;
+  min-height: 54px;
+}
+
+.primary:active { transform: scale(.98); }
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.progress {
+  width: 100%;
+  height: 8px;
+  background: #28454a;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 20px 0 28px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gold);
+  transition: width .3s;
+}
+
+.category {
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 65px;
+  padding: 15px;
+  margin: 12px 0;
+  background: var(--option);
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.option:not(:disabled):hover {
+  border-color: var(--gold);
+}
+
+.letter {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: #31545b;
+  border-radius: 9px;
+  font-weight: 800;
+}
+
+.option.correct {
+  background: #164e3e;
+  border-color: var(--green);
+}
+
+.option.wrong {
+  background: #542d35;
+  border-color: var(--red);
+}
+
+.option:disabled { cursor: default; }
+
+.feedback {
+  background: #203e43;
+  padding: 16px;
+  border-radius: 12px;
+  line-height: 1.7;
+  margin-top: 18px;
+}
+
+.feedback strong { color: var(--gold); }
+
+.result-score {
+  font-size: clamp(55px, 12vw, 85px);
+  color: var(--gold);
+  font-weight: 900;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.result-name {
+  text-align: center;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.review {
+  margin-top: 25px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.review-item {
+  padding: 14px 0;
+  border-bottom: 1px solid #365158;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.review-item p { margin: 5px 0; }
+.correct-text { color: var(--green); }
+
+footer {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  body { padding: 12px; align-items: flex-start; }
+  .container { margin: auto 0; }
+  .card { padding: 22px 17px; border-radius: 18px; }
+  .option { padding: 12px; }
+  .stats { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+<section class="card">
+
+<!-- HALAMAN UTAMA -->
+<div id="home">
+  <div class="logo">☪️</div>
+  <div class="eyebrow">RISE UMMAH CAMP</div>
+
+  <h1>
+    EXPLORACE<br>
+    <span class="gold">KUIZ ISLAMIK</span>
+  </h1>
+
+  <p class="description">
+    Uji pengetahuan asas Islam anda!<br>
+    30 Soalan • 300 Markah • Tiada Had Masa
+  </p>
+
+  <label for="teamName">Nama kumpulan</label>
+  <input
+    id="teamName"
+    maxlength="40"
+    placeholder="Contoh: Kumpulan Al-Fateh"
+  >
+
+  <button class="primary" id="startBtn">
+    MULAKAN CABARAN →
+  </button>
+</div>
+
+<!-- HALAMAN KUIZ -->
+<div id="quiz" class="hidden">
+
+  <div class="stats">
+    <span id="questionNumber">SOALAN 1 / 30</span>
+    <span id="score">⭐ 0 MARKAH</span>
+  </div>
+
+  <div class="progress">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="category" id="category"></div>
+  <h2 id="questionText"></h2>
+
+  <div id="options"></div>
+
+  <div
+    id="feedback"
+    class="feedback hidden"
+    aria-live="polite"
+  ></div>
+
+  <button class="primary hidden" id="nextBtn">
+    SOALAN SETERUSNYA →
+  </button>
+</div>
+
+<!-- HALAMAN KEPUTUSAN -->
+<div id="result" class="hidden">
+
+  <div class="logo">🏆</div>
+  <div class="eyebrow">CABARAN SELESAI</div>
+
+  <h1>TAHNIAH!</h1>
+  <p class="result-name" id="resultName"></p>
+
+  <div class="result-score" id="finalScore"></div>
+  <p class="description" id="resultMessage"></p>
+
+  <div class="review">
+    <h2>Semakan Jawapan</h2>
+    <div id="reviewList"></div>
+  </div>
+
+  <button class="primary" id="restartBtn">
+    MAIN SEMULA ↻
+  </button>
+</div>
+
+</section>
+
+<footer>EXPLORACE ISLAMIK • RISE UMMAH CAMP</footer>
+</main>
+
+<script>
+
+// =====================================
+// 30 SOALAN PENGETAHUAN AM ISLAM
+// answer: 0=A, 1=B, 2=C, 3=D
+// =====================================
+
+const questions = [
+  {
+    category: "RUKUN ISLAM",
+    q: "Berapakah jumlah rukun Islam?",
+    options: ["4", "5", "6", "7"],
+    answer: 1,
+    explanation: "Rukun Islam berjumlah lima."
+  },
+  {
+    category: "RUKUN IMAN",
+    q: "Berapakah jumlah rukun iman?",
+    options: ["5", "7", "6", "4"],
+    answer: 2,
+    explanation: "Rukun iman berjumlah enam."
+  },
+  {
+    category: "AL-QURAN",
+    q: "Apakah nama kitab suci umat Islam?",
+    options: ["Taurat", "Zabur", "Injil", "Al-Quran"],
+    answer: 3,
+    explanation: "Al-Quran ialah kitab suci umat Islam."
+  },
+  {
+    category: "SIRAH",
+    q: "Siapakah nabi terakhir yang diutuskan Allah?",
+    options: [
+      "Nabi Muhammad SAW",
+      "Nabi Isa AS",
+      "Nabi Musa AS",
+      "Nabi Ibrahim AS"
+    ],
+    answer: 0,
+    explanation: "Nabi Muhammad SAW ialah nabi dan rasul terakhir."
+  },
+  {
+    category: "IBADAH",
+    q: "Berapakah jumlah solat fardu sehari semalam?",
+    options: ["3", "4", "5", "6"],
+    answer: 2,
+    explanation: "Umat Islam diwajibkan menunaikan lima solat fardu."
+  },
+  {
+    category: "IBADAH",
+    q: "Apakah nama solat fardu yang dilakukan pada waktu pagi sebelum matahari terbit?",
+    options: ["Zuhur", "Subuh", "Asar", "Isyak"],
+    answer: 1,
+    explanation: "Solat Subuh dilakukan pada awal pagi."
+  },
+  {
+    category: "IBADAH",
+    q: "Berapakah rakaat solat Maghrib?",
+    options: ["2", "4", "3", "5"],
+    answer: 2,
+    explanation: "Solat Maghrib mempunyai tiga rakaat."
+  },
+  {
+    category: "IBADAH",
+    q: "Pada bulan apakah umat Islam diwajibkan berpuasa?",
+    options: [
+      "Muharam", "Syawal", "Rejab", "Ramadan"
+    ],
+    answer: 3,
+    explanation: "Puasa wajib dilaksanakan pada bulan Ramadan."
+  },
+  {
+    category: "IBADAH",
+    q: "Apakah nama perayaan selepas berakhirnya bulan Ramadan?",
+    options: [
+      "Aidiladha", "Aidilfitri", "Maulidur Rasul", "Awal Muharam"
+    ],
+    answer: 1,
+    explanation: "Aidilfitri disambut pada 1 Syawal."
+  },
+  {
+    category: "IBADAH",
+    q: "Ke arah manakah umat Islam menghadap ketika solat?",
+    options: [
+      "Masjid Nabawi", "Bukit Safa", "Kaabah", "Gua Hira'"
+    ],
+    answer: 2,
+    explanation: "Kaabah di Masjidil Haram ialah arah kiblat umat Islam."
+  },
+  {
+    category: "SIRAH",
+    q: "Di manakah Nabi Muhammad SAW dilahirkan?",
+    options: ["Makkah", "Madinah", "Taif", "Syam"],
+    answer: 0,
+    explanation: "Rasulullah SAW dilahirkan di Makkah."
+  },
+  {
+    category: "SIRAH",
+    q: "Siapakah nama ibu Nabi Muhammad SAW?",
+    options: [
+      "Khadijah", "Fatimah", "Halimah", "Aminah"
+    ],
+    answer: 3,
+    explanation: "Ibu Rasulullah SAW ialah Aminah binti Wahb."
+  },
+  {
+    category: "SIRAH",
+    q: "Siapakah nama bapa Nabi Muhammad SAW?",
+    options: [
+      "Abu Talib", "Abdullah", "Abdul Muttalib", "Abbas"
+    ],
+    answer: 1,
+    explanation: "Bapa Rasulullah SAW ialah Abdullah bin Abdul Muttalib."
+  },
+  {
+    category: "SIRAH",
+    q: "Siapakah isteri pertama Nabi Muhammad SAW?",
+    options: [
+      "Aisyah", "Hafsah", "Khadijah", "Saudah"
+    ],
+    answer: 2,
+    explanation: "Khadijah binti Khuwailid ialah isteri pertama Rasulullah SAW."
+  },
+  {
+    category: "SIRAH",
+    q: "Apakah nama gua tempat wahyu pertama diturunkan?",
+    options: [
+      "Gua Hira'", "Gua Thur", "Gua Ashab al-Kahfi", "Gua Uhud"
+    ],
+    answer: 0,
+    explanation: "Wahyu pertama diturunkan di Gua Hira'."
+  },
+  {
+    category: "AL-QURAN",
+    q: "Apakah surah pertama dalam susunan mushaf Al-Quran?",
+    options: [
+      "Al-Ikhlas", "Al-Baqarah", "An-Nas", "Al-Fatihah"
+    ],
+    answer: 3,
+    explanation: "Surah Al-Fatihah ialah surah pertama dalam mushaf."
+  },
+  {
+    category: "AL-QURAN",
+    q: "Berapakah jumlah juzuk dalam Al-Quran?",
+    options: ["20", "30", "40", "25"],
+    answer: 1,
+    explanation: "Al-Quran dibahagikan kepada 30 juzuk."
+  },
+  {
+    category: "AL-QURAN",
+    q: "Apakah surah paling pendek dalam Al-Quran berdasarkan bilangan perkataan?",
+    options: [
+      "Al-Asr", "Al-Ikhlas", "Al-Kauthar", "An-Nasr"
+    ],
+    answer: 2,
+    explanation: "Surah Al-Kauthar ialah surah paling pendek berdasarkan bilangan perkataan."
+  },
+  {
+    category: "AL-QURAN",
+    q: "Apakah surah paling panjang dalam Al-Quran?",
+    options: [
+      "Al-Baqarah", "An-Nisa'", "Ali 'Imran", "Al-Ma'idah"
+    ],
+    answer: 0,
+    explanation: "Surah Al-Baqarah mempunyai 286 ayat."
+  },
+  {
+    category: "AKIDAH",
+    q: "Siapakah malaikat yang menyampaikan wahyu?",
+    options: [
+      "Mikail", "Israfil", "Malik", "Jibril"
+    ],
+    answer: 3,
+    explanation: "Malaikat Jibril menyampaikan wahyu dengan izin Allah."
+  },
+  {
+    category: "AKIDAH",
+    q: "Siapakah malaikat yang ditugaskan meniup sangkakala?",
+    options: [
+      "Jibril", "Israfil", "Mikail", "Ridwan"
+    ],
+    answer: 1,
+    explanation: "Malaikat Israfil ditugaskan meniup sangkakala."
+  },
+  {
+    category: "NABI DAN RASUL",
+    q: "Nabi manakah yang ditelan oleh ikan besar?",
+    options: [
+      "Nabi Musa AS", "Nabi Yusuf AS", "Nabi Yunus AS", "Nabi Nuh AS"
+    ],
+    answer: 2,
+    explanation: "Nabi Yunus AS ditelan oleh ikan besar."
+  },
+  {
+    category: "NABI DAN RASUL",
+    q: "Nabi manakah yang membina bahtera atas perintah Allah?",
+    options: [
+      "Nabi Nuh AS", "Nabi Ibrahim AS", "Nabi Isa AS", "Nabi Daud AS"
+    ],
+    answer: 0,
+    explanation: "Nabi Nuh AS membina bahtera atas perintah Allah."
+  },
+  {
+    category: "NABI DAN RASUL",
+    q: "Kitab Taurat diturunkan kepada nabi siapa?",
+    options: [
+      "Nabi Isa AS", "Nabi Daud AS", "Nabi Ibrahim AS", "Nabi Musa AS"
+    ],
+    answer: 3,
+    explanation: "Kitab Taurat diturunkan kepada Nabi Musa AS."
+  },
+  {
+    category: "SEJARAH ISLAM",
+    q: "Siapakah khalifah pertama selepas kewafatan Rasulullah SAW?",
+    options: [
+      "Umar bin al-Khattab",
+      "Abu Bakar as-Siddiq",
+      "Uthman bin Affan",
+      "Ali bin Abi Talib"
+    ],
+    answer: 1,
+    explanation: "Abu Bakar as-Siddiq ialah khalifah pertama."
+  },
+  {
+    category: "SEJARAH ISLAM",
+    q: "Ke bandar manakah Rasulullah SAW berhijrah dari Makkah?",
+    options: [
+      "Taif", "Syam", "Madinah", "Yaman"
+    ],
+    answer: 2,
+    explanation: "Rasulullah SAW berhijrah ke Madinah."
+  },
+  {
+    category: "PENGETAHUAN AM",
+    q: "Apakah bulan pertama dalam takwim Hijrah?",
+    options: [
+      "Muharam", "Safar", "Rejab", "Syawal"
+    ],
+    answer: 0,
+    explanation: "Muharam ialah bulan pertama dalam takwim Hijrah."
+  },
+  {
+    category: "PENGETAHUAN AM",
+    q: "Apakah nama masjid yang terletak di Madinah dan dibina oleh Rasulullah SAW?",
+    options: [
+      "Masjidil Haram",
+      "Masjid Al-Aqsa",
+      "Masjid Quba",
+      "Masjid Nabawi"
+    ],
+    answer: 3,
+    explanation: "Masjid Nabawi terletak di Madinah dan dibina oleh Rasulullah SAW."
+  },
+  {
+    category: "AKHLAK",
+    q: "Apakah maksud amanah?",
+    options: [
+      "Mengejar kekayaan",
+      "Menjaga kepercayaan dan tanggungjawab",
+      "Mengutamakan diri sendiri",
+      "Menyembunyikan kebenaran"
+    ],
+    answer: 1,
+    explanation: "Amanah bermaksud menjaga kepercayaan dan melaksanakan tanggungjawab."
+  },
+  {
+    category: "AKHLAK",
+    q: "Apakah ucapan yang digalakkan apabila menerima nikmat daripada Allah?",
+    options: [
+      "Astaghfirullah",
+      "Subhanallah",
+      "Alhamdulillah",
+      "Inna lillah"
+    ],
+    answer: 2,
+    explanation: "Alhamdulillah ialah ungkapan pujian dan syukur kepada Allah."
+  }
+];
+
+// =====================================
+// LOGIK WEBSITE
+// =====================================
+
+let currentIndex = 0;
+let totalScore = 0;
+let answered = false;
+let teamName = "";
+let answers = [];
+
+const POINTS = 10;
+const $ = id => document.getElementById(id);
+
+function showPage(page) {
+  ["home", "quiz", "result"].forEach(id => {
+    $(id).classList.toggle("hidden", id !== page);
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function startGame() {
+  teamName = $("teamName").value.trim() || "Kumpulan Tanpa Nama";
+  currentIndex = 0;
+  totalScore = 0;
+  answered = false;
+  answers = [];
+
+  showPage("quiz");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const item = questions[currentIndex];
+
+  $("questionNumber").textContent =
+    `SOALAN ${currentIndex + 1} / ${questions.length}`;
+
+  $("score").textContent = `⭐ ${totalScore} MARKAH`;
+  $("category").textContent = item.category;
+  $("questionText").textContent = item.q;
+
+  $("progressFill").style.width =
+    `${((currentIndex + 1) / questions.length) * 100}%`;
+
+  $("feedback").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+
+  const container = $("options");
+  container.replaceChildren();
+
+  item.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.type = "button";
+
+    const letter = document.createElement("span");
+    letter.className = "letter";
+    letter.textContent = "ABCD"[index];
+
+    const label = document.createElement("span");
+    label.textContent = option;
+
+    button.append(letter, label);
+
+    button.addEventListener("click", () => selectAnswer(index));
+    container.appendChild(button);
+  });
+}
+
+function selectAnswer(selectedIndex) {
+  if (answered) return;
+
+  answered = true;
+  const item = questions[currentIndex];
+  const correct = selectedIndex === item.answer;
+
+  if (correct) totalScore += POINTS;
+
+  answers.push({
+    question: item.q,
+    selected: selectedIndex,
+    correctAnswer: item.answer,
+    options: item.options,
+    correct: correct
+  });
+
+  const buttons = $("options").querySelectorAll(".option");
+
+  buttons.forEach((button, index) => {
+    button.disabled = true;
+
+    if (index === item.answer) {
+      button.classList.add("correct");
+    } else if (index === selectedIndex) {
+      button.classList.add("wrong");
+    }
+  });
+
+  const feedback = $("feedback");
+  const heading = document.createElement("strong");
+  heading.textContent = correct
+    ? "Betul! +10 markah"
+    : "Jawapan kurang tepat.";
+
+  const detail = document.createElement("div");
+  detail.textContent = item.explanation;
+
+  feedback.replaceChildren(heading, detail);
+  feedback.classList.remove("hidden");
+
+  $("score").textContent = `⭐ ${totalScore} MARKAH`;
+
+  $("nextBtn").textContent =
+    currentIndex === questions.length - 1
+      ? "LIHAT KEPUTUSAN →"
+      : "SOALAN SETERUSNYA →";
+
+  $("nextBtn").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  if (!answered) return;
+
+  currentIndex++;
+
+  if (currentIndex >= questions.length) {
+    showResult();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showResult() {
+  showPage("result");
+
+  const maximum = questions.length * POINTS;
+  const percentage = totalScore / maximum * 100;
+
+  $("resultName").textContent = teamName;
+  $("finalScore").textContent = `${totalScore}/${maximum}`;
+
+  let message;
+
+  if (percentage >= 90) {
+    message = "Masya-Allah! Pengetahuan Islam anda sangat baik!";
+  } else if (percentage >= 70) {
+    message = "Alhamdulillah! Prestasi yang bagus!";
+  } else if (percentage >= 50) {
+    message = "Usaha yang baik! Teruskan mendalami ilmu Islam.";
+  } else {
+    message = "Jangan berputus asa. Teruskan menambah ilmu!";
+  }
+
+  $("resultMessage").textContent = message;
+
+  const reviewList = $("reviewList");
+  reviewList.replaceChildren();
+
+  answers.forEach((item, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "review-item";
+
+    const question = document.createElement("strong");
+    question.textContent = `${index + 1}. ${item.question}`;
+
+    const chosen = document.createElement("p");
+    chosen.textContent =
+      `${item.correct ? "✓" : "✗"} Jawapan anda: ${item.options[item.selected]}`;
+
+    const answer = document.createElement("p");
+    answer.className = "correct-text";
+    answer.textContent =
+      `Jawapan betul: ${item.options[item.correctAnswer]}`;
+
+    wrapper.append(question, chosen, answer);
+    reviewList.appendChild(wrapper);
+  });
+}
+
+function restartGame() {
+  showPage("home");
+}
+
+$("startBtn").addEventListener("click", startGame);
+$("nextBtn").addEventListener("click", nextQuestion);
+$("restartBtn").addEventListener("click", restartGame);
+
+$("teamName").addEventListener("keydown", event => {
+  if (event.key === "Enter") startGame();
+});
+
+</script>
+</body>
+</html>
